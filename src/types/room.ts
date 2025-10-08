@@ -12,6 +12,6 @@ export interface Room {
 }
 
 export enum RoomStatus {
-  Clean = 'Clean',
-  Dirty = 'Dirty',
+  Clean = 'Kirli',
+  Dirty = 'Temiz',
 }

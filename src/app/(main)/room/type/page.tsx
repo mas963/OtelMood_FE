@@ -85,7 +85,7 @@ const RoomTypePage = () => {
       <Toast ref={toast} />
       <ConfirmDialog />
 
-      <div className="grid md:grid-cols-[3fr_1fr] lg:grid-cols-[5fr_1fr] grid-cols-1  gap-3">
+      <div className="grid md:grid-cols-[5fr_1fr] grid-cols-1 gap-3">
         <div className="">
           <Card title="Oda Tipleri">
             <DataTable value={roomTypes}>

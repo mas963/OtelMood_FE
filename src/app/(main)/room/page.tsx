@@ -8,6 +8,7 @@ import { Column } from "primereact/column";
 import { useEffect, useState } from "react";
 import { RoomService } from "@/services/RoomService";
 import { Room } from "@/types/room";
+import { Tag } from "primereact/tag";
 
 const RoomPage = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -21,7 +22,7 @@ const RoomPage = () => {
     return (
       <div className="flex items-center gap-2">
         <i className="pi pi-equals"></i>
-        <span className="font-bold">{data.roomType.name}</span>
+        <span className="font-bold">{data.roomType.name} Odaları</span>
       </div >
     );
   };
@@ -30,14 +31,20 @@ const RoomPage = () => {
     return (
       <>
         <td colSpan="4">
-          <div className="flex justify-end font-bold">Total Room: 50</div>
+          <div className="flex justify-end font-bold">Toplam Oda: 50</div>
         </td>
       </>
     );
   };
 
+  const activeBodyTemplate = (rowData: Room) => {
+    return (
+      <Tag severity={rowData.active ? 'success' : 'danger'}>{rowData.active ? 'Aktif' : 'Pasif'}</Tag>
+    );
+  };
+
   return (
-    <div className="grid md:grid-cols-[3fr_1fr] lg:grid-cols-[5fr_1fr] grid-cols-1 gap-3">
+    <div className="grid md:grid-cols-[5fr_1fr] grid-cols-1 gap-3">
       <div>
         <Card title="Oda Listesi">
           <DataTable value={rooms} rowGroupMode="subheader" groupRowsBy="roomType.name" sortMode="single" sortField="roomType.name"
@@ -45,7 +52,7 @@ const RoomPage = () => {
             <Column field="roomName" header="Oda" bodyStyle={{ fontWeight: 'bold' }}></Column>
             <Column field="groupName" header="Grup"></Column>
             <Column field="status" header="Durum"></Column>
-            <Column field="active" header="Aktif"></Column>
+            <Column field="active" header="Aktif" body={activeBodyTemplate}></Column>
           </DataTable>
         </Card>
       </div>
