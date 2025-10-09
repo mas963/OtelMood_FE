@@ -26,6 +26,7 @@ const RezervationPage = () => {
     { name: 'Standart', shortName: 'STD' },
     { name: 'Aile', shortName: 'Aile' },
     { name: 'Deluxe', shortName: 'Deluxe' },
+    { name: 'Suite', shortName: 'Suite' },
   ];
 
   const [checked, setChecked] = useState<boolean>(false);
@@ -70,7 +71,7 @@ const RezervationPage = () => {
         <div>
           <Card title="Rezervasyonlar">
             <DataTable value={booking} stripedRows tableStyle={{ minWidth: '50rem' }}>
-              <Column header="Oda No" body={(rowData: Booking) => rowData.roomNo + " - " + rowData.roomType}></Column>
+              <Column header="Oda" body={(rowData: Booking) => rowData.roomNo + " - " + rowData.roomType}></Column>
               <Column field="agent" header="Acenta"></Column>
               <Column field="customerName" header="Misafir Adı"></Column>
               <Column field="arrival" header="Giriş"></Column>
