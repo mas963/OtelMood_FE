@@ -30,7 +30,7 @@ const RoomPage = () => {
   const footerTemplate = (data: Room) => {
     return (
       <>
-        <td colSpan="4">
+        <td colSpan={4}>
           <div className="flex justify-end font-bold">Toplam Oda: 50</div>
         </td>
       </>

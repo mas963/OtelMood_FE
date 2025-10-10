@@ -5,11 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint",
+    "build:cf": "npx @cloudflare/next-on-pages",
+    "preview": "npm run build:cf && wrangler pages dev .vercel/output/static",
+    "deploy": "npm run build:cf && wrangler pages deploy .vercel/output/static"
   },
   "dependencies": {
     "chart.js": "^4.5.0",
-    "next": "15.5.4",
+    "next": "^15.5.2",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.7",
@@ -17,6 +21,7 @@
     "react-dom": "19.1.0"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.16",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

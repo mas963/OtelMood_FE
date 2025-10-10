@@ -11,11 +11,10 @@ import { SplitButton } from "primereact/splitbutton";
 import { Nullable } from "primereact/ts-helpers";
 import { useEffect, useRef, useState } from "react";
 import { InputText } from "primereact/inputtext";
-import { FloatLabel } from "primereact/floatlabel";
 import { ButtonGroup } from "primereact/buttongroup";
 import { RoomType } from "@/types/room";
 import { MultiSelect, MultiSelectChangeEvent } from "primereact/multiselect";
-import { Checkbox } from "primereact/checkbox";
+import { Toast } from "primereact/toast";
 
 const RezervationPage = () => {
   const [booking, setBooking] = useState<Booking[]>([]);
@@ -31,7 +30,7 @@ const RezervationPage = () => {
 
   const [checked, setChecked] = useState<boolean>(false);
 
-  const toast = useRef(null);
+  const toast = useRef<Toast>(null);
 
   useEffect(() => {
     const data = BookingService.getRezervations();
@@ -54,7 +53,7 @@ const RezervationPage = () => {
   ];
 
   const save = () => {
-    toast.current.show({ severity: 'success', summary: 'Success', detail: 'Data Saved' });
+    toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Data Saved' });
   };
 
   const bookingProgressBody = (rowData: Booking) => {
