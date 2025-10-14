@@ -1,8 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEventListener, useMountEffect, useUnmountEffect } from 'primereact/hooks';
-import React, { useContext, useEffect, useRef } from 'react';
+import { useEventListener, useUnmountEffect } from 'primereact/hooks';
+import React, { Suspense, useContext, useEffect, useRef } from 'react';
 import { classNames } from 'primereact/utils';
 import AppFooter from './AppFooter';
 import AppSidebar from './AppSidebar';
@@ -10,7 +9,7 @@ import AppTopbar from './AppTopbar';
 import { LayoutContext } from './context/layoutcontext';
 import { PrimeReactContext } from 'primereact/api';
 import { ChildContainerProps, LayoutState, AppTopbarRef } from '@/types';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { NavigationEvents } from './NavigationEvents';
 
 const Layout = ({ children }: ChildContainerProps) => {
     const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
@@ -32,13 +31,6 @@ const Layout = ({ children }: ChildContainerProps) => {
             }
         }
     });
-
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-    useEffect(() => {
-        hideMenu();
-        hideProfileMenu();
-    }, [pathname, searchParams]);
 
     const [bindProfileMenuOutsideClickListener, unbindProfileMenuOutsideClickListener] = useEventListener({
         type: 'click',
@@ -131,6 +123,9 @@ const Layout = ({ children }: ChildContainerProps) => {
                 </div>
                 <div className="layout-mask"></div>
             </div>
+            <Suspense fallback={null}>
+                <NavigationEvents />
+            </Suspense>
         </React.Fragment>
     );
 };
