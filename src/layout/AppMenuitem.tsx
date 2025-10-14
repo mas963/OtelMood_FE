@@ -1,29 +1,22 @@
 import { AppMenuItemProps } from "../types";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useContext, useEffect } from "react";
+import { Suspense, useContext, useEffect } from "react";
 import { MenuContext } from "./context/menucontext";
 import { CSSTransition } from "primereact/csstransition";
 import { classNames } from "primereact/utils";
 import { Ripple } from "primereact/ripple";
 import Link from "next/link";
+import { MenuItemObserver } from './MenuItemObserver';
 
 const AppMenuitem = (props: AppMenuItemProps) => {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const { activeMenu, setActiveMenu } = useContext(MenuContext);
   const item = props.item;
   const key = props.parentKey ? props.parentKey + '-' + props.index : String(props.index);
-  const isActiveRoute = item!.to && pathname === item!.to;
   const active = activeMenu === key || activeMenu.startsWith(key + '-');
   const onRouteChange = (url: string) => {
     if (item!.to && item!.to === url) {
       setActiveMenu(key);
     }
   };
-
-  useEffect(() => {
-    onRouteChange(pathname);
-  }, [pathname, searchParams]);
 
   const itemClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     if (item!.disabled) {
@@ -55,6 +48,11 @@ const AppMenuitem = (props: AppMenuItemProps) => {
 
   return (
     <li className={classNames({ 'layout-root-menuitem': props.root, 'active-menuitem': active })}>
+      {/* URL'yi dinleyen ve state güncelleyen görünmez bileşenimiz */}
+      <Suspense fallback={null}>
+        <MenuItemObserver item={item} index={props.index} parentKey={props.parentKey as string} />
+      </Suspense>
+
       {props.root && item!.visible !== false && <div className="layout-menuitem-root-text">{item!.label}</div>}
       {(!item!.to || item!.items) && item!.visible !== false ? (
         <a href={item!.url} onClick={(e) => itemClick(e)} className={classNames(item!.class, 'p-ripple')} target={item!.target} tabIndex={0}>
@@ -66,7 +64,8 @@ const AppMenuitem = (props: AppMenuItemProps) => {
       ) : null}
 
       {item!.to && !item!.items && item!.visible !== false ? (
-        <Link href={item!.to} replace={item!.replaceUrl} target={item!.target} onClick={(e) => itemClick(e)} className={classNames(item!.class, 'p-ripple', { 'active-route': isActiveRoute })} tabIndex={0}>
+        // isActiveRoute kontrolünü kaldırdık, Next.js <Link> bunu zaten yönetiyor. İsterseniz bırakabilirsiniz.
+        <Link href={item!.to} replace={item!.replaceUrl} target={item!.target} onClick={(e) => itemClick(e)} className={classNames(item!.class, 'p-ripple')} tabIndex={0}>
           <i className={classNames('layout-menuitem-icon', item!.icon)}></i>
           <span className="layout-menuitem-text">{item!.label}</span>
           {item!.items && <i className="pi pi-fw pi-angle-down layout-submenu-toggler"></i>}
