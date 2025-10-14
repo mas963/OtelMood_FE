@@ -50,7 +50,7 @@ const AppMenuitem = (props: AppMenuItemProps) => {
     <li className={classNames({ 'layout-root-menuitem': props.root, 'active-menuitem': active })}>
       {/* URL'yi dinleyen ve state güncelleyen görünmez bileşenimiz */}
       <Suspense fallback={null}>
-        <MenuItemObserver item={item} index={props.index} parentKey={props.parentKey as string} />
+        <MenuItemObserver item={item} index={props.index ?? 0} parentKey={props.parentKey as string} />
       </Suspense>
 
       {props.root && item!.visible !== false && <div className="layout-menuitem-root-text">{item!.label}</div>}
