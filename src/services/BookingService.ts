@@ -1,7 +1,7 @@
 import { Booking } from "@/types/booking";
 
 export const BookingService = {
-  getRezervations(): Booking[] {
+  getBookings(): Booking[] {
     return [
       {
         roomNo: "101",
@@ -10,7 +10,7 @@ export const BookingService = {
         arrival: "2025-10-07",
         departure: "2025-10-09",
         roomType: "Standart",
-        rezervationId: "1",
+        bookingId: "1",
       },
       {
         roomNo: "102",
@@ -19,7 +19,7 @@ export const BookingService = {
         arrival: "2025-10-07",
         departure: "2025-10-10",
         roomType: "Standart",
-        rezervationId: "2",
+        bookingId: "2",
       },
       {
         roomNo: "103",
@@ -28,7 +28,7 @@ export const BookingService = {
         arrival: "2025-10-12",
         departure: "2025-10-15",
         roomType: "Standart",
-        rezervationId: "3",
+        bookingId: "3",
       },
     ];
   }

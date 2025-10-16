@@ -5,5 +5,5 @@ export interface Booking {
   arrival: string;
   departure: string;
   roomType: string;
-  rezervationId: string;
+  bookingId: string;
 }
