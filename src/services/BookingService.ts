@@ -36,7 +36,7 @@ export const BookingService = {
         customerName: "İbrahim Kar",
         arrival: "2025-10-20",
         departure: "2025-10-21",
-        roomType: "Kral",
+        roomType: "Deluxe",
         bookingId: "124137",
       },
       {
@@ -45,7 +45,7 @@ export const BookingService = {
         customerName: "Alexandar Ludwig",
         arrival: "2025-10-16",
         departure: "2025-10-24",
-        roomType: "Kral",
+        roomType: "Deluxe",
         bookingId: "124178",
       },
     ];

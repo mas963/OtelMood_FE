@@ -1,74 +1,48 @@
-import {AppMenuItem} from "../types";
+import { AppMenuItem } from "../types";
 import AppMenuitem from "./AppMenuitem";
-import {MenuProvider} from "./context/menucontext";
+import { MenuProvider } from "./context/menucontext";
 
 const AppMenu = () => {
   const model: AppMenuItem[] = [
     {
       label: 'Dashboard',
-      items: [{label: 'Genel Durum', icon: 'pi pi-fw pi-home', to: '/'}]
+      items: [{ label: 'Genel Durum', icon: 'pi pi-fw pi-home', to: '/' }]
     },
     {
-      label: 'Rezervasyonlar',
+      label: 'Ön Büro',
       items: [
-        {label: 'Yeni Rezervasyon', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout'},
-        {label: 'Rezervasyon Listesi', icon: 'pi pi-fw pi-check-square', to: '/uikit/input'},
+        { label: 'Rezervasyon Listesi', icon: 'pi pi-fw pi-list', to: '/booking' },
+        { label: 'Rezervasyon Takvimi', icon: 'pi pi-fw pi-calendar', to: '/booking/calendar' },
+        { label: 'Room Rack', icon: 'pi pi-fw pi-th-large', to: '/roomrack' },
       ]
     },
     {
-      label: 'Odalar',
+      label: 'Ayarlar',
       items: [
-        {label: 'Oda Listesi', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout'},
-        {label: 'Oda Durumları', icon: 'pi pi-fw pi-check-square', to: '/uikit/input'},
-      ]
-    },
-    {
-      label: 'Müşteriler',
-      items: [
-        {label: 'Müşteri Listesi', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout'},
-        {label: 'Yeni Müşteri Ekle', icon: 'pi pi-fw pi-check-square', to: '/uikit/input'},
-      ]
-    },
-    {
-      label: 'Finans & Faturalama',
-      items: [
-        {label: 'Fatura Oluştur', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout'},
-        {label: 'Gelir / Gider Kayıtları', icon: 'pi pi-fw pi-check-square', to: '/uikit/input'},
-      ]
-    },
-    {
-      label: 'Housekeeping',
-      items: [
-        {label: 'Oda Temizlik Durumu', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout'},
-        {label: 'Personel Görev Atama', icon: 'pi pi-fw pi-check-square', to: '/uikit/input'},
-      ]
-    },
-    {
-      label: 'Stok & Envanter',
-      items: [
-        {label: 'Stok Listesi', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout'},
-        {label: 'Malzeme Giriş / Çıkış', icon: 'pi pi-fw pi-check-square', to: '/uikit/input'},
-      ]
-    },
-    {
-      label: 'Personel',
-      items: [
-        {label: 'Personel Listesi', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout'},
-        {label: 'Vardiye Planı', icon: 'pi pi-fw pi-check-square', to: '/uikit/input'},
-      ]
-    },
-    {
-      label: 'Raporlama',
-      items: [
-        {label: 'Doluluk Oranları', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout'},
-        {label: 'Gelir / Gider Analizi', icon: 'pi pi-fw pi-check-square', to: '/uikit/input'},
-      ]
-    },
-    {
-      label: 'Yönetim & Ayarlar',
-      items: [
-        {label: 'Kullanıcı Yönetimi', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout'},
-        {label: 'Oda Tipi & Fiyatlandırma', icon: 'pi pi-fw pi-check-square', to: '/uikit/input'},
+        {
+          label: 'Otel Bilgileri',
+          icon: 'pi pi-fw pi-info-circle',
+        },
+        {
+          label: 'Odalar',
+          icon: 'pi pi-fw pi-objects-column',
+          to: '/room',
+          items: [
+            { label: 'Oda Listesi', icon: 'pi pi-fw pi-list', to: '/room' },
+            { label: 'Oda Tipleri', icon: 'pi pi-fw pi-sitemap', to: '/room/type' },
+            { label: 'Kat Düzeni', icon: 'pi pi-fw pi-building', to: '/room/type' },
+          ]
+        },
+        {
+          label: 'Fiyatlar',
+          icon: 'pi pi-fw pi-money-bill',
+          to: '/uikit/formlayout'
+        },
+        {
+          label: 'Kullanıcılar',
+          icon: 'pi pi-fw pi-users',
+          to: '/uikit/formlayout'
+        },
       ]
     },
   ];

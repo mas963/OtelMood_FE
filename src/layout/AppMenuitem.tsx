@@ -1,5 +1,5 @@
 import { AppMenuItemProps } from "../types";
-import { Suspense, useContext, useEffect } from "react";
+import { Suspense, useContext, useEffect, useRef } from "react";
 import { MenuContext } from "./context/menucontext";
 import { CSSTransition } from "primereact/csstransition";
 import { classNames } from "primereact/utils";
@@ -36,14 +36,19 @@ const AppMenuitem = (props: AppMenuItemProps) => {
   };
 
   const subMenu = item!.items && item!.visible !== false && (
-    <CSSTransition timeout={{ enter: 1000, exit: 450 }} classNames="layout-submenu" in={props.root ? true : active} key={item!.label}>
-      <ul>
-        {item!.items.map((child, i) => {
-          return <AppMenuitem item={child} index={i} className={child.badgeClass} parentKey={key} key={child.label} />;
-        })}
-      </ul>
+    (() => {
+      const submenuRef = useRef<HTMLUListElement | null>(null);
 
-    </CSSTransition>
+      return (
+        <CSSTransition nodeRef={submenuRef} timeout={{ enter: 1000, exit: 450 }} classNames="layout-submenu" in={props.root ? true : active} key={item!.label}>
+          <ul ref={submenuRef}>
+            {item!.items.map((child, i) => {
+              return <AppMenuitem item={child} index={i} className={child.badgeClass} parentKey={key} key={child.label} />;
+            })}
+          </ul>
+        </CSSTransition>
+      );
+    })()
   );
 
   return (
@@ -65,7 +70,7 @@ const AppMenuitem = (props: AppMenuItemProps) => {
 
       {item!.to && !item!.items && item!.visible !== false ? (
         // isActiveRoute kontrolünü kaldırdık, Next.js <Link> bunu zaten yönetiyor. İsterseniz bırakabilirsiniz.
-        <Link href={item!.to} replace={item!.replaceUrl} target={item!.target} onClick={(e) => itemClick(e)} className={classNames(item!.class, 'p-ripple')} tabIndex={0}>
+        <Link href={item!.to} replace={item!.replaceUrl} target={item!.target} onClick={(e) => itemClick(e)} className={classNames(item!.class, 'p-ripple', { 'active-route': active })} tabIndex={0}>
           <i className={classNames('layout-menuitem-icon', item!.icon)}></i>
           <span className="layout-menuitem-text">{item!.label}</span>
           {item!.items && <i className="pi pi-fw pi-angle-down layout-submenu-toggler"></i>}
