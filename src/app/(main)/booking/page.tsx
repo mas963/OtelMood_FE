@@ -11,12 +11,13 @@ import { SplitButton } from "primereact/splitbutton";
 import { Nullable } from "primereact/ts-helpers";
 import { useEffect, useRef, useState } from "react";
 import { InputText } from "primereact/inputtext";
-import { ButtonGroup } from "primereact/buttongroup";
 import { RoomType } from "@/types/room";
 import { MultiSelect, MultiSelectChangeEvent } from "primereact/multiselect";
 import { Toast } from "primereact/toast";
 import { Dialog } from "primereact/dialog";
 import { Tag } from "primereact/tag";
+import { SelectButton, SelectButtonChangeEvent } from "primereact/selectbutton";
+import { Agent } from "@/types/agent";
 
 interface LazyTableState {
   first: number;
@@ -25,6 +26,11 @@ interface LazyTableState {
   sortField?: string;
   sortOrder?: number;
   filters: DataTableFilterMeta;
+}
+
+interface TableType {
+  name: string;
+  value: string;
 }
 
 const BookingPage = () => {
@@ -51,7 +57,7 @@ const BookingPage = () => {
     sortField: null,
     sortOrder: null,
     filters: {
-      'roomNo': { value: '', matchMode: 'contains' },
+      'roomName': { value: '', matchMode: 'contains' },
       'roomType': { value: [], matchMode: 'in' },
       'agent': { value: [], matchMode: 'in' },
       'customerName': { value: '', matchMode: 'contains' },
@@ -62,6 +68,14 @@ const BookingPage = () => {
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [totalRecords, setTotalRecords] = useState<number>(0);
+  const tableTypes: TableType[] = [
+    { name: "Beklenenler", value: "beklenenler" },
+    { name: "Konaklayanlar", value: "konaklayanlar" },
+    { name: "Ayrılacaklar", value: "ayrilacaklar" },
+    { name: "Tümü", value: "tumu" },
+  ];
+
+  const [tableType, setTableType] = useState<string>(tableTypes[3].value);
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
@@ -129,7 +143,7 @@ const BookingPage = () => {
       <Button
         label="Vazgeç"
         icon="pi pi-times"
-        severity="info"
+        severity="secondary"
         onClick={() => setBookingDialog(false)}
       />
       <Button
@@ -168,7 +182,7 @@ const BookingPage = () => {
     );
   };
 
-  const roomNoFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
+  const roomNameFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
     return (
       <InputText
         type="text"
@@ -236,10 +250,30 @@ const BookingPage = () => {
     return (
       <div className="flex items-center">
         <span className="mr-2">{rowData.departure}</span>
-        <Tag severity="info">{days} Gün</Tag>
+        <Tag severity="warning">{days} Gün</Tag>
       </div>
     );
   };
+
+  const headerTemplate = () => {
+    return (
+      <div className="flex flex-wrap justify-between items-center">
+        <SelectButton
+          value={tableType}
+          onChange={(e: SelectButtonChangeEvent) => setTableType(e.value)}
+          optionLabel="name"
+          options={tableTypes}
+          optionValue="value"
+        />
+
+        <Button
+          label="Rezervasyon Ekle"
+          icon="pi pi-plus"
+          onClick={() => setBookingDialog(true)}
+        />
+      </div>
+    )
+  }
 
   return (
     <>
@@ -262,15 +296,16 @@ const BookingPage = () => {
             filters={lazyState.filters}
             loading={loading}
             emptyMessage="Rezervasyon bulunamadı"
+            header={headerTemplate}
           >
             <Column
-              field="roomNo"
+              field="roomName"
               header="Oda No"
               sortable
               filter
-              filterField="roomNo"
+              filterField="roomName"
               showFilterMenu={false}
-              filterElement={roomNoFilterTemplate}
+              filterElement={roomNameFilterTemplate}
               filterMatchMode="in"
             ></Column>
             <Column

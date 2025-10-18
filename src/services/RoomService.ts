@@ -1,4 +1,4 @@
-import { Room, RoomStatus, RoomType } from "@/types/room";
+import { Room, RoomType } from "@/types/room";
 
 export const RoomService = {
   getRoomTypes(): RoomType[] {
@@ -11,14 +11,14 @@ export const RoomService = {
 
   getRooms(): Room[] {
     return [
-      { roomName: '101', roomType: { name: 'Standart', shortName: 'STD' }, groupName: 'Kat 1', status: RoomStatus.Clean, active: true },
-      { roomName: '102', roomType: { name: 'Standart', shortName: 'STD' }, groupName: 'Kat 1', status: RoomStatus.Dirty, active: false },
-      { roomName: '103', roomType: { name: 'Standart', shortName: 'STD' }, groupName: 'Kat 1', status: RoomStatus.Clean, active: true },
-      { roomName: '201', roomType: { name: 'Kral', shortName: 'Kral' }, groupName: 'Kat 2', status: RoomStatus.Clean, active: false },
-      { roomName: '202', roomType: { name: 'Kral', shortName: 'Kral' }, groupName: 'Kat 2', status: RoomStatus.Dirty, active: true },
-      { roomName: '203', roomType: { name: 'Kral', shortName: 'Kral' }, groupName: 'Kat 2', status: RoomStatus.Clean, active: true },
-      { roomName: '301', roomType: { name: 'Aile', shortName: 'Aile' }, groupName: 'Kat 3', status: RoomStatus.Dirty, active: true },
-      { roomName: '302', roomType: { name: 'Aile', shortName: 'Aile' }, groupName: 'Kat 3', status: RoomStatus.Clean, active: true },
+      { roomName: '101', roomType: { name: 'Standart', shortName: 'STD' }, groupName: 'Kat 1', status: "Temiz", active: true },
+      { roomName: '102', roomType: { name: 'Standart', shortName: 'STD' }, groupName: 'Kat 1', status: "Temiz", active: false },
+      { roomName: '103', roomType: { name: 'Standart', shortName: 'STD' }, groupName: 'Kat 1', status: "Kirli", active: true },
+      { roomName: '201', roomType: { name: 'Kral', shortName: 'Kral' }, groupName: 'Kat 2', status: "Temiz", active: false },
+      { roomName: '202', roomType: { name: 'Kral', shortName: 'Kral' }, groupName: 'Kat 2', status: "Temiz", active: true },
+      { roomName: '203', roomType: { name: 'Kral', shortName: 'Kral' }, groupName: 'Kat 2', status: "Kirli", active: true },
+      { roomName: '301', roomType: { name: 'Aile', shortName: 'Aile' }, groupName: 'Kat 3', status: "Temiz", active: true },
+      { roomName: '302', roomType: { name: 'Aile', shortName: 'Aile' }, groupName: 'Kat 3', status: "Temiz", active: true },
     ];
   }
 }

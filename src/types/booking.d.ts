@@ -1,9 +1,9 @@
 export interface Booking {
-  roomNo: string;
+  roomName: string;
+  roomType: string;
   agent: string;
   customerName: string;
   arrival: string;
   departure: string;
-  roomType: string;
   bookingId: string;
 }

@@ -1,7 +1,6 @@
 'use client';
 
 import { RoomService } from "@/services/RoomService";
-import { RoomType } from "@/types/room";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import { Column } from "primereact/column";
@@ -9,10 +8,11 @@ import { DataTable } from "primereact/datatable";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import { useEffect, useRef, useState } from "react";
-import { confirmDialog, ConfirmDialog } from 'primereact/confirmdialog';
+import { ConfirmDialog } from 'primereact/confirmdialog';
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import { InputNumber } from "primereact/inputnumber";
+import { RoomType } from "@/types/room";
 
 const RoomTypePage = () => {
   let emptyRoomType: RoomType = {
