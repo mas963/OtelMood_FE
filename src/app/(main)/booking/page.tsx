@@ -1,23 +1,32 @@
 "use client";
 
-import { BookingService } from "@/services/BookingService";
-import { Booking } from "@/types/booking";
-import { Button } from "primereact/button";
-import { Calendar } from "primereact/calendar";
-import { Card } from "primereact/card";
-import { Column, ColumnFilterElementTemplateOptions } from "primereact/column";
-import { DataTable, DataTableFilterEvent, DataTableFilterMeta, DataTablePageEvent, DataTableSortEvent } from "primereact/datatable";
-import { SplitButton } from "primereact/splitbutton";
-import { Nullable } from "primereact/ts-helpers";
-import { useEffect, useRef, useState } from "react";
-import { InputText } from "primereact/inputtext";
-import { RoomType } from "@/types/room";
-import { MultiSelect, MultiSelectChangeEvent } from "primereact/multiselect";
-import { Toast } from "primereact/toast";
-import { Dialog } from "primereact/dialog";
-import { Tag } from "primereact/tag";
-import { SelectButton, SelectButtonChangeEvent } from "primereact/selectbutton";
-import { Agent } from "@/types/agent";
+import {BookingService} from "@/services/BookingService";
+import {Booking} from "@/types/booking";
+import {Button} from "primereact/button";
+import {Calendar} from "primereact/calendar";
+import {Card} from "primereact/card";
+import {Column, ColumnFilterElementTemplateOptions} from "primereact/column";
+import {
+  DataTable,
+  DataTableFilterEvent,
+  DataTableFilterMeta,
+  DataTablePageEvent,
+  DataTableSortEvent
+} from "primereact/datatable";
+import {SplitButton} from "primereact/splitbutton";
+import {Nullable} from "primereact/ts-helpers";
+import {useEffect, useRef, useState} from "react";
+import {InputText} from "primereact/inputtext";
+import {RoomType} from "@/types/room";
+import {MultiSelect, MultiSelectChangeEvent} from "primereact/multiselect";
+import {Toast} from "primereact/toast";
+import {Tag} from "primereact/tag";
+import {SelectButton, SelectButtonChangeEvent} from "primereact/selectbutton";
+import {InputNumber} from "primereact/inputnumber";
+import {Dropdown} from "primereact/dropdown";
+import {CheckboxChangeEvent} from "primereact/checkbox";
+import {Guest} from "@/types/guest";
+import BookingDialog from "@/components/booking/BookingDialog";
 
 interface LazyTableState {
   first: number;
@@ -34,22 +43,12 @@ interface TableType {
 }
 
 const BookingPage = () => {
-  const [bookingDialog, setBookingDialog] = useState<boolean>(false);
   const [booking, setBooking] = useState<Booking[]>([]);
   const [dates, setDates] = useState<Nullable<(Date | null)[]>>(null);
   const [value, setValue] = useState("");
-  const [selectedRoomTypes, setSelectedRoomTypes] = useState<RoomType | null>(
-    null,
-  );
-  const roomTypes: RoomType[] = [
-    { name: "Standart", shortName: "Standart" },
-    { name: "Deluxe", shortName: "Deluxe" },
-    { name: "Suite", shortName: "Suite" },
-  ];
-  const agentList: Agent[] = [
-    { name: "Tatilbudur" },
-    { name: "Walkin" },
-  ];
+  const [bookingDialog, setBookingDialog] = useState<boolean>(false);
+  const [selectedRoomTypes, setSelectedRoomTypes] = useState<RoomType | null>(null);
+  const toast = useRef<Toast>(null);
   const [lazyState, setLazyState] = useState<LazyTableState>({
     first: 0,
     rows: 10,
@@ -57,26 +56,37 @@ const BookingPage = () => {
     sortField: null,
     sortOrder: null,
     filters: {
-      'roomName': { value: '', matchMode: 'contains' },
-      'roomType': { value: [], matchMode: 'in' },
-      'agent': { value: [], matchMode: 'in' },
-      'customerName': { value: '', matchMode: 'contains' },
-      'arrival': { value: '', matchMode: 'contains' },
-      'departure': { value: '', matchMode: 'contains' },
-      'bookingId': { value: '', matchMode: 'contains' },
+      'roomName': {value: '', matchMode: 'contains'},
+      'roomType': {value: [], matchMode: 'in'},
+      'source': {value: [], matchMode: 'in'},
+      'customerName': {value: '', matchMode: 'contains'},
+      'arrival': {value: '', matchMode: 'contains'},
+      'departure': {value: '', matchMode: 'contains'},
+      'bookingId': {value: '', matchMode: 'contains'},
     }
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [totalRecords, setTotalRecords] = useState<number>(0);
+
   const tableTypes: TableType[] = [
-    { name: "Beklenenler", value: "beklenenler" },
-    { name: "Konaklayanlar", value: "konaklayanlar" },
-    { name: "Ayrılacaklar", value: "ayrilacaklar" },
-    { name: "Tümü", value: "tumu" },
+    {name: "Beklenenler", value: "beklenenler"},
+    {name: "Konaklayanlar", value: "konaklayanlar"},
+    {name: "Ayrılacaklar", value: "ayrilacaklar"},
+    {name: "Tümü", value: "tumu"},
+  ];
+
+  const roomTypes: RoomType[] = [
+    {name: "Standart", shortName: "Standart"},
+    {name: "Deluxe", shortName: "Deluxe"},
+    {name: "Suite", shortName: "Suite"},
+  ];
+
+  const sources = [
+    {name: "Resepsiyon", code: "resepsiyon"},
+    {name: "Tatilbudur", code: "tatilbudur"},
   ];
 
   const [tableType, setTableType] = useState<string>(tableTypes[3].value);
-  const toast = useRef<Toast>(null);
 
   useEffect(() => {
     loadLazyData();
@@ -109,11 +119,13 @@ const BookingPage = () => {
   const items = [
     {
       label: "Deneme 1",
-      command: () => { },
+      command: () => {
+      },
     },
     {
       label: "Deneme 2",
-      command: () => { },
+      command: () => {
+      },
     },
   ];
 
@@ -138,27 +150,20 @@ const BookingPage = () => {
     );
   };
 
-  const bookingFooterContent = (
-    <div>
-      <Button
-        label="Vazgeç"
-        icon="pi pi-times"
-        severity="secondary"
-        onClick={() => setBookingDialog(false)}
-      />
-      <Button
-        label="Oluştur"
-        icon="pi pi-check"
-        onClick={() => setBookingDialog(false)}
-      />
-    </div>
-  );
+  const handleSaveBooking = () => {
+    // Handle save booking logic here
+    toast.current?.show({
+      severity: "success",
+      summary: "Başarılı",
+      detail: "Rezervasyon başarıyla oluşturuldu",
+    });
+  };
 
-  const agentFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
+  const sourceFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
     return (
       <MultiSelect
         value={options.value}
-        options={agentList}
+        options={sources}
         onChange={(e) => options.filterApplyCallback(e.value)}
         optionLabel="name"
         placeholder="Tümü"
@@ -319,13 +324,13 @@ const BookingPage = () => {
               filterMatchMode="in"
             ></Column>
             <Column
-              field="agent"
-              header="Acenta"
+              field="source"
+              header="Kaynak"
               sortable
               filter
-              filterField="agent"
+              filterField="source"
               showFilterMenu={false}
-              filterElement={agentFilterTemplate}
+              filterElement={sourceFilterTemplate}
               filterMatchMode="in"
             ></Column>
             <Column
@@ -368,48 +373,17 @@ const BookingPage = () => {
             ></Column>
             <Column
               body={bookingProgressBody}
-              style={{ width: "10rem" }}
+              style={{width: "10rem"}}
             ></Column>
           </DataTable>
         </Card>
       </div>
 
-      <Dialog
+      <BookingDialog
         visible={bookingDialog}
-        modal
-        header="Yeni Rezervasyon Oluştur"
-        footer={bookingFooterContent}
-        style={{ width: "75rem" }}
-        onHide={() => {
-          if (!bookingDialog) return;
-          setBookingDialog(false);
-        }}
-      >
-        <div className="flex gap-3">
-          <div>
-            <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-6">
-              <div className="sm:col-span-3">
-                <label htmlFor="name1" className="block">
-                  Name
-                </label>
-                <InputText id="name1" type="text" />
-              </div>
-              <div className="sm:col-span-3">
-                <label htmlFor="name1" className="block">
-                  Name
-                </label>
-                <InputText id="name1" type="text" />
-              </div>
-            </div>
-          </div>
-          <div>
-            <label htmlFor="name1" className="block">
-              Name
-            </label>
-            <InputText id="name1" type="text" />
-          </div>
-        </div>
-      </Dialog>
+        onHide={() => setBookingDialog(false)}
+        onSave={handleSaveBooking}
+      />
     </>
   );
 };

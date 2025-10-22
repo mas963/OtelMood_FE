@@ -1,20 +1,20 @@
-import { Booking } from "@/types/booking";
+import {Booking} from "@/types/booking";
 
 export const BookingService = {
   getBookings(): Booking[] {
     return [
       {
         roomName: "101",
-        agent: "Walkin",
+        roomType: "Standart",
+        source: "Resepsiyon",
         customerName: "Mustafa Yılmaz",
         arrival: "2025-10-18",
         departure: "2025-10-21",
-        roomType: "Standart",
         bookingId: "123123",
       },
       {
         roomName: "102",
-        agent: "Walkin",
+        source: "Resepsiyon",
         customerName: "Mehmet Eren",
         arrival: "2025-10-17",
         departure: "2025-10-19",
@@ -23,7 +23,7 @@ export const BookingService = {
       },
       {
         roomName: "103",
-        agent: "Tatilbudur",
+        source: "Tatilbudur",
         customerName: "Can Çelik",
         arrival: "2025-10-19",
         departure: "2025-10-20",
@@ -32,7 +32,7 @@ export const BookingService = {
       },
       {
         roomName: "201",
-        agent: "Tatilbudur",
+        source: "Tatilbudur",
         customerName: "İbrahim Kar",
         arrival: "2025-10-20",
         departure: "2025-10-21",
@@ -41,7 +41,7 @@ export const BookingService = {
       },
       {
         roomName: "203",
-        agent: "Booking",
+        source: "Booking",
         customerName: "Alexandar Ludwig",
         arrival: "2025-10-16",
         departure: "2025-10-24",

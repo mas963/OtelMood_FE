@@ -4,3 +4,22 @@
     --color-primary: #10b981;
     --text-color: #10b981;
 }
+
+/* BookingDialog: full-screen on small devices */
+@media (max-width: 640px) {
+  /* PrimeReact attaches provided className to the root .p-dialog */
+  .p-dialog.booking-dialog {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .p-dialog.booking-dialog .p-dialog-content {
+    /* Leave some room for header/footer; adjust if needed */
+    max-height: calc(100dvh - 6rem);
+    overflow: auto;
+  }
+}

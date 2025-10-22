@@ -1,7 +1,7 @@
 export interface Booking {
   roomName: string;
   roomType: string;
-  agent: string;
+  source: string;
   customerName: string;
   arrival: string;
   departure: string;
