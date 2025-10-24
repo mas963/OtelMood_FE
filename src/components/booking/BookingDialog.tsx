@@ -1,11 +1,9 @@
 "use client";
 
-"use client";
-
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
-import { Dropdown } from "primereact/dropdown";
+import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import { TabPanel, TabView } from "primereact/tabview";
@@ -15,43 +13,58 @@ import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
 import { Guest } from "@/types/guest";
 import { Dialog } from "primereact/dialog";
 import { useEffect, useState } from "react";
-import { RoomType } from "@/types/room";
+import { Room, RoomType } from "@/types/room";
 
 export interface BookingDialogProps {
   visible: boolean;
   onHide: () => void;
   onSave: () => void;
+  initialRoom?: Room;
+  initialDate?: Date;
 }
 
 const BookingDialog = ({
   visible,
   onHide,
   onSave,
+  initialRoom,
+  initialDate
 }: BookingDialogProps) => {
   const [guests, setGuests] = useState<Guest[]>([]);
+  const [selectedRoom, setSelectedRoom] = useState<Room | null>(initialRoom || null);
+  const [checkInDate, setCheckInDate] = useState<Date | null>(initialDate || null);
   const [guestCount, setGuestCount] = useState<number>(1);
   const [checked1, setChecked1] = useState<boolean>(false);
-  
+
+  // Set initial values when props change
+  useEffect(() => {
+    if (initialRoom) setSelectedRoom(initialRoom);
+    if (initialDate) setCheckInDate(initialDate);
+  }, [initialRoom, initialDate]);
+
   // Static data
   const roomTypes: RoomType[] = [
-    { name: "Standart", shortName: "Standart" },
+    { name: "Standart", shortName: "STD" },
     { name: "Deluxe", shortName: "Deluxe" },
     { name: "Suite", shortName: "Suite" },
   ];
-  
+
   const rooms = [
     { roomName: "101" },
     { roomName: "102" },
     { roomName: "103" },
-    { roomName: "104" },
-    { roomName: "105" },
+    { roomName: "201" },
+    { roomName: "202" },
+    { roomName: "203" },
+    { roomName: "301" },
+    { roomName: "302" },
   ];
-  
+
   const sources = [
     { name: "Resepsiyon", code: "resepsiyon" },
     { name: "Tatilbudur", code: "tatilbudur" },
   ];
-  
+
   const accommodationTypes = [
     { name: "Sadece Oda", code: "sadece-oda" },
     { name: "Her Şey Dahil", code: "her-sey-dahil" },
@@ -60,7 +73,7 @@ const BookingDialog = ({
   // Initialize guests when component mounts or guestCount changes
   useEffect(() => {
     if (guestCount <= 0) return;
-    
+
     const initialGuests: Guest[] = [{
       name: "Ahmet",
       lastName: "Yılmaz",
@@ -85,7 +98,7 @@ const BookingDialog = ({
         email: "",
       });
     }
-    
+
     setGuests(initialGuests);
   }, [guestCount]);
 
@@ -123,12 +136,17 @@ const BookingDialog = ({
       onHide={onHide}
       className="p-fluid booking-dialog"
     >
-    <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-3">
-      <div>
-        <div className="grid grid-cols-8 gap-3">
-          <div className="col-span-3">
-            <label htmlFor="arrival" className="block">Giriş</label>
-              <Calendar className="w-full" inputId="arrival" />
+      <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-3">
+        <div>
+          <div className="grid grid-cols-8 gap-3">
+            <div className="col-span-3">
+              <label htmlFor="arrival" className="block">Giriş</label>
+              <Calendar
+                className="w-full"
+                inputId="arrival"
+                value={checkInDate}
+                onChange={(e) => setCheckInDate(e.value)}
+              />
             </div>
             <div className="col-span-3">
               <label htmlFor="departure" className="block">Çıkış</label>
@@ -147,45 +165,59 @@ const BookingDialog = ({
             </div>
             <div className="col-span-2">
               <label htmlFor="roomType" className="block">Oda Tipi</label>
-              <Dropdown className="w-full" inputId="roomType" options={roomTypes} optionLabel="name" />
+              <Dropdown
+                className="w-full"
+                inputId="roomType"
+                options={roomTypes}
+                optionLabel="name"
+                value={selectedRoom?.roomType || null}
+                onChange={(e) => setSelectedRoom(prev => prev ? { ...prev, roomType: e.value } : null)}
+              />
             </div>
             <div className="col-span-2">
               <label htmlFor="roomName" className="block">Oda No</label>
-              <Dropdown className="w-full" inputId="roomName" options={rooms} optionLabel="roomName" />
+              <Dropdown
+                className="w-full"
+                inputId="roomName"
+                options={rooms}
+                optionLabel="roomName"
+                value={selectedRoom?.roomName ? { roomName: selectedRoom.roomName } : null}
+                onChange={(e) => setSelectedRoom(prev => prev ? { ...prev, roomName: e.value.roomName } : null)}
+              />
             </div>
           </div>
 
           <div className="grid grid-cols-8 gap-3 mt-3">
             <div className="col-span-4">
               <label htmlFor="accommodationType" className="block">Konaklama Türü</label>
-              <Dropdown 
-                className="w-full" 
-                inputId="accommodationType" 
+              <Dropdown
+                className="w-full"
+                inputId="accommodationType"
                 options={accommodationTypes}
                 optionLabel="name"
               />
             </div>
             <div className="col-span-2">
               <label htmlFor="adult" className="block">Yetişkin</label>
-              <InputNumber 
-                value={guestCount} 
-                onChange={(e) => setGuestCount(e.value || 1)} 
+              <InputNumber
+                value={guestCount}
+                onChange={(e) => setGuestCount(e.value || 1)}
                 className="w-full"
-                inputId="adult" 
-                showButtons 
-                inputClassName="w-full" 
-                min={1} 
+                inputId="adult"
+                showButtons
+                inputClassName="w-full"
+                min={1}
                 max={10}
               />
             </div>
             <div className="col-span-2">
               <label htmlFor="child" className="block">Çocuk</label>
-              <InputNumber 
-                className="w-full" 
-                inputId="child" 
-                showButtons 
-                inputClassName="w-full" 
-                min={0} 
+              <InputNumber
+                className="w-full"
+                inputId="child"
+                showButtons
+                inputClassName="w-full"
+                min={0}
                 max={10}
               />
             </div>
@@ -261,10 +293,10 @@ const BookingDialog = ({
           <div className="grid grid-cols-1">
             <TabView>
               <TabPanel header="Misafirler">
-                <DataTable 
-                  value={guests} 
-                  editMode="cell" 
-                  tableStyle={{ minWidth: '50rem' }} 
+                <DataTable
+                  value={guests}
+                  editMode="cell"
+                  tableStyle={{ minWidth: '50rem' }}
                   scrollable
                   scrollHeight="330px"
                 >
@@ -315,9 +347,9 @@ const BookingDialog = ({
                       <label className="block">İndirim</label>
                       <div className="p-inputgroup flex-1">
                         <span className="p-inputgroup-addon">
-                          <Checkbox 
-                            checked={checked1} 
-                            onChange={(e: CheckboxChangeEvent) => setChecked1(!checked1)} 
+                          <Checkbox
+                            checked={checked1}
+                            onChange={(e: CheckboxChangeEvent) => setChecked1(!checked1)}
                           />
                         </span>
                         <InputText placeholder="% indirim" disabled={!checked1} />
@@ -328,9 +360,9 @@ const BookingDialog = ({
                       <label className="block">Manuel</label>
                       <div className="p-inputgroup flex-1">
                         <span className="p-inputgroup-addon">
-                          <Checkbox 
-                            checked={checked1} 
-                            onChange={(e: CheckboxChangeEvent) => setChecked1(!checked1)} 
+                          <Checkbox
+                            checked={checked1}
+                            onChange={(e: CheckboxChangeEvent) => setChecked1(!checked1)}
                           />
                         </span>
                         <InputText placeholder="Tutar" disabled={!checked1} />
@@ -341,9 +373,9 @@ const BookingDialog = ({
                       <label className="block">Para Birimi</label>
                       <div className="p-inputgroup flex-1">
                         <span className="p-inputgroup-addon">
-                          <Checkbox 
-                            checked={checked1} 
-                            onChange={(e: CheckboxChangeEvent) => setChecked1(!checked1)} 
+                          <Checkbox
+                            checked={checked1}
+                            onChange={(e: CheckboxChangeEvent) => setChecked1(!checked1)}
                           />
                         </span>
                         <InputText placeholder="Tutar" disabled={!checked1} />

@@ -3,7 +3,7 @@
 import dayjs from "dayjs";
 import { Card } from "primereact/card";
 import isBetween from "dayjs/plugin/isBetween";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import React from "react";
 import { Booking } from "@/types/booking";
 import { RoomService } from "@/services/RoomService";
@@ -15,20 +15,28 @@ import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { ProgressSpinner } from "primereact/progressspinner";
 import LandscapePrompt from "@/components/ui/LandscapePrompt";
+import BookingDialog from "@/components/booking/BookingDialog";
+import { Toast } from "primereact/toast";
 
 dayjs.locale("tr");
 dayjs.extend(isBetween);
 
 const BookingCalendarPage = () => {
+  const toast = useRef<Toast>(null);
   const [dayCount, setDayCount] = useState<number>(14);
   const [startDate, setStartDate] = useState(dayjs().startOf("day"));
   const [rooms, setRooms] = useState<Room[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showBookingDialog, setShowBookingDialog] = useState(false);
+  const [selectedBookingData, setSelectedBookingData] = useState<{ room: Room | null; date: dayjs.Dayjs | null }>({
+    room: null,
+    date: null
+  });
   // sıralama durumu
   const [sortBy, setSortBy] = useState<"roomName" | "roomType" | null>(null);
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
-  const calendarPeriod: number[] = [14, 21, 28]; 
+  const calendarPeriod: number[] = [14, 21, 28];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,7 +66,17 @@ const BookingCalendarPage = () => {
   const scrollRight = () => setStartDate((prev) => prev.add(dayCount, "day"));
 
   const handleCellClick = (room: Room, date: dayjs.Dayjs) => {
-    alert(`${room.roomName} numaralı oda için ${date.format("DD MMM YYYY")} tarihine rezervasyon ekle`);
+    if (date.isBefore(dayjs().startOf("day"))) {
+      toast.current?.show({ severity: "warn", summary: "Uyarı", detail: "Geçmiş tarihe rezervasyon yapılamaz" });
+      return;
+    }
+    setSelectedBookingData({ room, date });
+    setShowBookingDialog(true);
+  };
+
+  const handleBookingSave = () => {
+    // Handle save logic here
+    setShowBookingDialog(false);
   };
 
   const toggleSort = (key: "roomName" | "roomType") => {
@@ -88,6 +106,7 @@ const BookingCalendarPage = () => {
 
   return (
     <>
+      <Toast ref={toast} />
       <Card title="Rezervasyon Takvimi">
         <div className="p-4">
           <div className="flex items-center justify-between mb-3">
@@ -101,10 +120,10 @@ const BookingCalendarPage = () => {
               />
             </div>
             <div className="flex gap-2">
-              <Calendar 
-                value={startDate.toDate()} 
-                onChange={(e) => e.value && setStartDate(dayjs(e.value).startOf("day"))} 
-                showIcon 
+              <Calendar
+                value={startDate.toDate()}
+                onChange={(e) => e.value && setStartDate(dayjs(e.value).startOf("day"))}
+                showIcon
               />
               <Button icon="pi pi-angle-left" onClick={scrollLeft} outlined />
               <Button icon="pi pi-angle-right" onClick={scrollRight} outlined />
@@ -139,9 +158,9 @@ const BookingCalendarPage = () => {
                     Oda Tipi {sortBy === "roomType" ? (sortDir === "asc" ? "↑" : "↓") : "↑↓"}
                   </div>
                   {dates.map((d) => (
-                    <div 
-                      key={d.toString()} 
-                      className="border text-center font-semibold p-2 bg-primary text-stone-50 text-sm" 
+                    <div
+                      key={d.toString()}
+                      className="border text-center font-semibold p-2 bg-primary text-stone-50 text-sm"
                       style={{ width: `${cellWidth}px` }}
                     >
                       {d.format("DD MMM ddd")}
@@ -182,9 +201,8 @@ const BookingCalendarPage = () => {
                             return (
                               <div
                                 key={`${room.roomName}-cell-${date.toString()}`}
-                                className={`h-12 border-r last:border-r-0 ${
-                                  isOccupied ? "bg-gray-100" : "hover:bg-green-100 cursor-pointer"
-                                } flex-shrink-0`}
+                                className={`h-12 border-r last:border-r-0 ${isOccupied ? "bg-gray-100" : "hover:bg-green-100 cursor-pointer"
+                                  } flex-shrink-0`}
                                 style={{ width: `${cellWidth}px` }}
                                 onClick={() => {
                                   if (!isOccupied) handleCellClick(room, date);
@@ -236,7 +254,14 @@ const BookingCalendarPage = () => {
           </div>
         </div>
       </Card>
-      <LandscapePrompt />
+
+      <BookingDialog
+        visible={showBookingDialog}
+        onHide={() => setShowBookingDialog(false)}
+        onSave={handleBookingSave}
+        initialRoom={selectedBookingData.room}
+        initialDate={selectedBookingData.date?.toDate()}
+      />
     </>
   );
 }

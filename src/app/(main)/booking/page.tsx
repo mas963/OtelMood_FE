@@ -255,27 +255,35 @@ const BookingPage = () => {
     return (
       <div className="flex items-center">
         <span className="mr-2">{rowData.departure}</span>
-        <Tag severity="warning">{days} Gün</Tag>
+        <Tag>{days} Gün</Tag>
       </div>
     );
   };
 
   const headerTemplate = () => {
     return (
-      <div className="flex flex-wrap justify-between items-center">
-        <SelectButton
-          value={tableType}
-          onChange={(e: SelectButtonChangeEvent) => setTableType(e.value)}
-          optionLabel="name"
-          options={tableTypes}
-          optionValue="value"
-        />
-
-        <Button
-          label="Rezervasyon Ekle"
-          icon="pi pi-plus"
-          onClick={() => setBookingDialog(true)}
-        />
+      <div className="flex flex-col sm:flex-row gap-3 w-full">
+        <div className="w-full overflow-x-auto pb-2">
+          <div className="inline-flex min-w-max">
+            <SelectButton
+              value={tableType}
+              onChange={(e: SelectButtonChangeEvent) => setTableType(e.value)}
+              optionLabel="name"
+              options={tableTypes}
+              optionValue="value"
+              className="flex-nowrap"
+            />
+          </div>
+        </div>
+        <div className="w-full sm:w-auto flex-shrink-0">
+          <Button
+            label="Rezervasyon Ekle"
+            icon="pi pi-plus"
+            onClick={() => setBookingDialog(true)}
+            className="whitespace-nowrap min-w-fit w-full sm:w-auto"
+            size="small"
+          />
+        </div>
       </div>
     )
   }
