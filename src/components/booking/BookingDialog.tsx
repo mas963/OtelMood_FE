@@ -7,7 +7,7 @@ import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import { TabPanel, TabView } from "primereact/tabview";
-import { Column } from "primereact/column";
+import { Column, ColumnEditorOptions, ColumnEvent } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { InputMask, InputMaskChangeEvent } from "primereact/inputmask";
 import { Guest } from "@/types/guest";
@@ -42,6 +42,28 @@ const BookingDialog = ({
     if (initialDate) setCheckInDate(initialDate);
   }, [initialRoom, initialDate]);
 
+  // Reset form when dialog is closed
+  useEffect(() => {
+    if (!visible) {
+      // Reset all form fields
+      setSelectedRoom(initialRoom || null);
+      setCheckInDate(initialDate || null);
+      setGuestCount(1);
+      setChecked1(false);
+      // Reset guests to just the default one
+      setGuests([{
+        name: "Ahmet",
+        lastName: "Yılmaz",
+        nationality: "Türk",
+        idNumber: "11111111111",
+        gender: "Erkek",
+        birthDate: "1990-01-01",
+        phone: "5442031073",
+        email: "ahmet.yilmaz@gmail.com",
+      }]);
+    }
+  }, [visible]);
+
   // Static data
   const roomTypes: RoomType[] = [
     { name: "Standart", shortName: "STD" },
@@ -70,6 +92,25 @@ const BookingDialog = ({
     { name: "Her Şey Dahil", code: "her-sey-dahil" },
   ];
 
+  const genders = [
+    { name: "Erkek", code: "erkek" },
+    { name: "Kadın", code: "kadın" },
+  ];
+
+  const nationalities = [
+    { name: "Türk", code: "turkish" },
+    { name: "İngiliz", code: "english" },
+    { name: "Rus", code: "russian" },
+    { name: "Alman", code: "german" },
+    { name: "Arap", code: "arabic" },
+    { name: "Kore", code: "korean" },
+    { name: "Japon", code: "japanese" },
+    { name: "Çin", code: "chinese" },
+    { name: "İtalyan", code: "italian" },
+    { name: "Fransız", code: "french" },
+    { name: "İspanyol", code: "spanish" },
+  ];
+
   // Initialize guests when component mounts or guestCount changes
   useEffect(() => {
     if (guestCount <= 0) return;
@@ -77,7 +118,7 @@ const BookingDialog = ({
     const initialGuests: Guest[] = [{
       name: "Ahmet",
       lastName: "Yılmaz",
-      nationality: "Türkiye",
+      nationality: "Türk",
       idNumber: "11111111111",
       gender: "Erkek",
       birthDate: "1990-01-01",
@@ -108,6 +149,11 @@ const BookingDialog = ({
     onHide();
   };
 
+  const handleHide = () => {
+    onHide();
+    // The form will be reset by the useEffect when visible becomes false
+  };
+
   // Footer content
   const footerContent = (
     <div>
@@ -115,7 +161,7 @@ const BookingDialog = ({
         label="Vazgeç"
         icon="pi pi-times"
         severity="secondary"
-        onClick={onHide}
+        onClick={handleHide}
         className="mr-2"
       />
       <Button
@@ -124,6 +170,89 @@ const BookingDialog = ({
       />
     </div>
   );
+
+  const cellEditor = (options: ColumnEditorOptions) => {
+    switch (options.field) {
+      case 'nationality':
+        return nationalityEditor(options);
+      case 'gender':
+        return genderEditor(options);
+      case 'birthDate':
+        return birthDateEditor(options);
+      default:
+        return textEditor(options);
+    }
+  };
+
+  const onCellEditComplete = (e: ColumnEvent) => {
+    const { rowData, newValue, field } = e;
+
+    if (newValue !== null && newValue !== undefined) {
+      setGuests(prevGuests => {
+        return prevGuests.map(guest => 
+          guest === rowData ? { ...guest, [field]: newValue } : guest
+        );
+      });
+    }
+  };
+
+  const textEditor = (options: ColumnEditorOptions) => {
+    return (
+      <InputText
+        type="text"
+        value={options.value || ''}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => options.editorCallback(e.target.value)}
+        onKeyDown={(e) => e.stopPropagation()}
+      />
+    );
+  };
+
+  const nationalityEditor = (options: ColumnEditorOptions) => {
+    const selectedNationality = nationalities.find(n => n.name === options.value) || null;
+
+    return (
+      <Dropdown
+        value={selectedNationality}
+        options={nationalities}
+        optionLabel="name"
+        onChange={(e: DropdownChangeEvent) => {
+          options.editorCallback(e.value ? e.value.name : '');
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+        placeholder="Seçiniz"
+        className="w-full"
+      />
+    );
+  };
+
+  const genderEditor = (options: ColumnEditorOptions) => {
+    const selectedGender = genders.find(g => g.name === options.value) || null;
+
+    return (
+      <Dropdown
+        value={selectedGender}
+        options={genders}
+        optionLabel="name"
+        onChange={(e: DropdownChangeEvent) => {
+          options.editorCallback(e.value ? e.value.name : '');
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+        placeholder="Seçiniz"
+        className="w-full"
+      />
+    );
+  };
+
+  const birthDateEditor = (options: ColumnEditorOptions) => {
+    return (
+      <InputText
+        type="date"
+        value={options.value || ''}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => options.editorCallback(e.target.value)}
+        onKeyDown={(e) => e.stopPropagation()}
+      />
+    );
+  };
 
   return (
     <Dialog
@@ -305,38 +434,55 @@ const BookingDialog = ({
                     header="Adı"
                     style={{ minWidth: '100px' }}
                     frozen
+                    editor={(options) => cellEditor(options)}
+                    onCellEditComplete={onCellEditComplete}
                   />
                   <Column
                     field="lastName"
                     header="Soyadı"
                     style={{ minWidth: '100px' }}
+                    editor={(options) => cellEditor(options)}
+                    onCellEditComplete={onCellEditComplete}
                   />
                   <Column
                     field="nationality"
                     header="Uyruk"
+                    editor={(options) => cellEditor(options)}
+                    onCellEditComplete={onCellEditComplete}
                   />
                   <Column
                     field="idNumber"
                     header="Kimlik No"
-                    style={{ minWidth: '100px' }}
+                    style={{ minWidth: '150px' }}
+                    editor={(options) => cellEditor(options)}
+                    onCellEditComplete={onCellEditComplete}
                   />
                   <Column
                     field="gender"
                     header="Cinsiyet"
+                    editor={(options) => cellEditor(options)}
+                    onCellEditComplete={onCellEditComplete}
                   />
                   <Column
                     field="birthDate"
                     header="Doğum Tarihi"
                     style={{ minWidth: '120px' }}
+                    editor={(options) => cellEditor(options)}
+                    onCellEditComplete={onCellEditComplete}
                   />
                   <Column
                     field="phone"
                     header="Telefon"
                     style={{ minWidth: '140px' }}
+                    editor={(options) => cellEditor(options)}
+                    onCellEditComplete={onCellEditComplete}
                   />
                   <Column
                     field="email"
                     header="E-posta"
+                    style={{ minWidth: '150px' }}
+                    editor={(options) => cellEditor(options)}
+                    onCellEditComplete={onCellEditComplete}
                   />
                 </DataTable>
               </TabPanel>
