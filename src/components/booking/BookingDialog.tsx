@@ -111,36 +111,49 @@ const BookingDialog = ({
     { name: "İspanyol", code: "spanish" },
   ];
 
-  // Initialize guests when component mounts or guestCount changes
+  // Initialize or update guests when component mounts or guestCount changes
   useEffect(() => {
     if (guestCount <= 0) return;
 
-    const initialGuests: Guest[] = [{
-      name: "Ahmet",
-      lastName: "Yılmaz",
-      nationality: "Türk",
-      idNumber: "11111111111",
-      gender: "Erkek",
-      birthDate: "1990-01-01",
-      phone: "5442031073",
-      email: "ahmet.yilmaz@gmail.com",
-    }];
-
-    // Add additional guests based on guestCount
-    for (let i = 1; i < guestCount; i++) {
-      initialGuests.push({
-        name: `Misafir ${i + 1}`,
-        lastName: "",
-        nationality: "",
-        idNumber: "",
-        gender: "",
-        birthDate: "",
-        phone: "",
-        email: "",
-      });
-    }
-
-    setGuests(initialGuests);
+    setGuests(prevGuests => {
+      // If we have existing guests, use them as a base
+      if (prevGuests.length > 0) {
+        const newGuests = [...prevGuests];
+        
+        // If we need to add more guests
+        while (newGuests.length < guestCount) {
+          newGuests.push({
+            name: `Misafir ${newGuests.length + 1}`,
+            lastName: "",
+            nationality: "",
+            idNumber: "",
+            gender: "",
+            birthDate: "",
+            phone: "",
+            email: "",
+          });
+        }
+        
+        // If we need to remove guests
+        if (newGuests.length > guestCount) {
+          return newGuests.slice(0, guestCount);
+        }
+        
+        return newGuests;
+      }
+      
+      // Initial load - create first guest with default values
+      return [{
+        name: "Ahmet",
+        lastName: "Yılmaz",
+        nationality: "Türk",
+        idNumber: "11111111111",
+        gender: "Erkek",
+        birthDate: "1990-01-01",
+        phone: "5442031073",
+        email: "ahmet.yilmaz@gmail.com",
+      }];
+    });
   }, [guestCount]);
 
   // Handle save button click
@@ -353,6 +366,7 @@ const BookingDialog = ({
           </div>
 
           <div className="grid grid-cols-8 gap-3 mt-3 bg-gray-100 p-3 rounded">
+            <span className="col-span-8 font-semibold">Birincil Misafir</span>
             <div className="col-span-4">
               <label htmlFor="mainGuestName" className="block">Adı</label>
               <InputText

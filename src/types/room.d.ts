@@ -10,3 +10,11 @@ export interface Room {
   status: string
   active: boolean
 }
+
+export interface RoomRate {
+  rateName: string
+  conceptTypes: string[]
+  cancelPolicy: string
+  sources: string[]
+  active: boolean
+}

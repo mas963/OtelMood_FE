@@ -1,4 +1,4 @@
-import { Room, RoomType } from "@/types/room";
+import { Room, RoomRate, RoomType } from "@/types/room";
 
 export const RoomService = {
   getRoomTypes(): RoomType[] {
@@ -20,5 +20,17 @@ export const RoomService = {
       { roomName: '301', roomType: { name: 'Suite', shortName: 'Suite' }, groupName: 'Kat 3', status: "Temiz", active: true },
       { roomName: '302', roomType: { name: 'Suite', shortName: 'Suite' }, groupName: 'Kat 3', status: "Temiz", active: true },
     ];
-  }
+  },
+
+  getRoomRates(): RoomRate[] {
+    return [
+      {
+        rateName: 'Fiyatlandırma 1',
+        conceptTypes: ['Her Şey Dahil', 'Sadece Kahvaltı'],
+        cancelPolicy: 'OtelMood',
+        sources: ['OtelMood', 'Channel Manager'],
+        active: true
+      },
+    ];
+  },
 }

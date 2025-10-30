@@ -15,7 +15,6 @@
     "chart.js": "^4.5.0",
     "dayjs": "^1.11.18",
     "next": "^15.5.2",
-    "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.7",
     "react": "19.1.0",

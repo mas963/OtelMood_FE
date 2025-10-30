@@ -1,11 +1,11 @@
 "use client";
 
-import {BookingService} from "@/services/BookingService";
-import {Booking} from "@/types/booking";
-import {Button} from "primereact/button";
-import {Calendar} from "primereact/calendar";
-import {Card} from "primereact/card";
-import {Column, ColumnFilterElementTemplateOptions} from "primereact/column";
+import { BookingService } from "@/services/BookingService";
+import { Booking } from "@/types/booking";
+import { Button } from "primereact/button";
+import { Calendar } from "primereact/calendar";
+import { Card } from "primereact/card";
+import { Column, ColumnFilterElementTemplateOptions } from "primereact/column";
 import {
   DataTable,
   DataTableFilterEvent,
@@ -13,19 +13,15 @@ import {
   DataTablePageEvent,
   DataTableSortEvent
 } from "primereact/datatable";
-import {SplitButton} from "primereact/splitbutton";
-import {Nullable} from "primereact/ts-helpers";
-import {useEffect, useRef, useState} from "react";
-import {InputText} from "primereact/inputtext";
-import {RoomType} from "@/types/room";
-import {MultiSelect, MultiSelectChangeEvent} from "primereact/multiselect";
-import {Toast} from "primereact/toast";
-import {Tag} from "primereact/tag";
-import {SelectButton, SelectButtonChangeEvent} from "primereact/selectbutton";
-import {InputNumber} from "primereact/inputnumber";
-import {Dropdown} from "primereact/dropdown";
-import {CheckboxChangeEvent} from "primereact/checkbox";
-import {Guest} from "@/types/guest";
+import { SplitButton } from "primereact/splitbutton";
+import { Nullable } from "primereact/ts-helpers";
+import { useEffect, useRef, useState } from "react";
+import { InputText } from "primereact/inputtext";
+import { RoomType } from "@/types/room";
+import { MultiSelect } from "primereact/multiselect";
+import { Toast } from "primereact/toast";
+import { Tag } from "primereact/tag";
+import { SelectButton, SelectButtonChangeEvent } from "primereact/selectbutton";
 import BookingDialog from "@/components/booking/BookingDialog";
 
 interface LazyTableState {
@@ -56,34 +52,34 @@ const BookingPage = () => {
     sortField: null,
     sortOrder: null,
     filters: {
-      'roomName': {value: '', matchMode: 'contains'},
-      'roomType': {value: [], matchMode: 'in'},
-      'source': {value: [], matchMode: 'in'},
-      'customerName': {value: '', matchMode: 'contains'},
-      'arrival': {value: '', matchMode: 'contains'},
-      'departure': {value: '', matchMode: 'contains'},
-      'bookingId': {value: '', matchMode: 'contains'},
+      'roomName': { value: '', matchMode: 'contains' },
+      'roomType': { value: [], matchMode: 'in' },
+      'source': { value: [], matchMode: 'in' },
+      'customerName': { value: '', matchMode: 'contains' },
+      'arrival': { value: '', matchMode: 'contains' },
+      'departure': { value: '', matchMode: 'contains' },
+      'bookingId': { value: '', matchMode: 'contains' },
     }
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
   const tableTypes: TableType[] = [
-    {name: "Beklenenler", value: "beklenenler"},
-    {name: "Konaklayanlar", value: "konaklayanlar"},
-    {name: "Ayrılacaklar", value: "ayrilacaklar"},
-    {name: "Tümü", value: "tumu"},
+    { name: "Beklenenler", value: "beklenenler" },
+    { name: "Konaklayanlar", value: "konaklayanlar" },
+    { name: "Ayrılacaklar", value: "ayrilacaklar" },
+    { name: "Tümü", value: "tumu" },
   ];
 
   const roomTypes: RoomType[] = [
-    {name: "Standart", shortName: "Standart"},
-    {name: "Deluxe", shortName: "Deluxe"},
-    {name: "Suite", shortName: "Suite"},
+    { name: "Standart", shortName: "STD" },
+    { name: "Deluxe", shortName: "DLX" },
+    { name: "Suite", shortName: "SUI" },
   ];
 
   const sources = [
-    {name: "Resepsiyon", code: "resepsiyon"},
-    {name: "Tatilbudur", code: "tatilbudur"},
+    { name: "Resepsiyon", code: "resepsiyon" },
+    { name: "Tatilbudur", code: "tatilbudur" },
   ];
 
   const [tableType, setTableType] = useState<string>(tableTypes[3].value);
@@ -381,7 +377,7 @@ const BookingPage = () => {
             ></Column>
             <Column
               body={bookingProgressBody}
-              style={{width: "10rem"}}
+              style={{ width: "10rem" }}
             ></Column>
           </DataTable>
         </Card>
