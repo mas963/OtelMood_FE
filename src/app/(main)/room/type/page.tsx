@@ -180,16 +180,6 @@ const RoomTypePage = () => {
 
             <div className="grid grid-cols-8 gap-3">
               <div className="col-span-4">
-                <label htmlFor="minChild" className="block">Min Çocuk</label>
-                <InputNumber
-                  id="minChild"
-                  inputClassName="w-full"
-                  min={1}
-                  max={10}
-                  showButtons
-                />
-              </div>
-              <div className="col-span-4">
                 <label htmlFor="maxChild" className="block">Max Çocuk</label>
                 <InputNumber
                   id="maxChild"

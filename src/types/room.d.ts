@@ -1,3 +1,20 @@
+export interface RoomRateDetail {
+  name: string
+  shortName: string
+  guestSettings: {
+    guestCount: {
+      minGuests?: number,
+      maxGuests: number,
+      minAdults?: number,
+      maxAdults?: number,
+      maxChildren?: number
+    },
+    adultGuestMultiplier: Array<{ count: number, multiplier: number }>,
+    childGuestMultiplier: Array<{ count: number, multiplier: number }>,
+  }
+  price: number
+}
+
 export interface RoomType {
   name: string
   shortName: string

@@ -1,11 +1,98 @@
-import { Room, RoomRate, RoomType } from "@/types/room";
+import { Room, RoomRate, RoomType, RoomRateDetail } from "@/types/room";
 
 export const RoomService = {
   getRoomTypes(): RoomType[] {
     return [
       { name: 'Standart', shortName: 'STD' },
+      { name: 'Aile', shortName: 'Aile' },
       { name: 'Deluxe', shortName: 'Deluxe' },
       { name: 'Suite', shortName: 'Suite' },
+    ];
+  },
+
+  getRoomRateDetails(): RoomRateDetail[] {
+    return [
+      {
+        name: 'Standart',
+        shortName: 'STD',
+        guestSettings: {
+          guestCount: {
+            minGuests: 1,
+            maxGuests: 3,
+            minAdults: 1,
+            maxAdults: 3,
+            maxChildren: 2
+          },
+          adultGuestMultiplier: [
+            {
+              count: 1,
+              multiplier: 1
+            },
+            {
+              count: 2,
+              multiplier: 1.9
+            },
+            {
+              count: 3,
+              multiplier: 2.7
+            }
+          ],
+          childGuestMultiplier: [
+            {
+              count: 1,
+              multiplier: 0.7
+            },
+            {
+              count: 2,
+              multiplier: 1.3
+            }
+          ]
+        },
+        price: 1000
+      },
+
+      {
+        name: 'Aile',
+        shortName: 'Aile',
+        guestSettings: {
+          guestCount: {
+            minGuests: 2,
+            maxGuests: 4,
+            minAdults: 2,
+            maxAdults: 4,
+            maxChildren: 3
+          },
+          adultGuestMultiplier: [
+            {
+              count: 2,
+              multiplier: 1
+            },
+            {
+              count: 3,
+              multiplier: 1.9
+            },
+            {
+              count: 4,
+              multiplier: 2.7
+            }
+          ],
+          childGuestMultiplier: [
+            {
+              count: 1,
+              multiplier: 0.75
+            },
+            {
+              count: 2,
+              multiplier: 1.4
+            },
+            {
+              count: 3,
+              multiplier: 1.95
+            }
+          ]
+        },
+        price: 2000
+      },
     ];
   },
 
