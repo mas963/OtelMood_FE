@@ -49,7 +49,19 @@ const RoomRateCreatePage = () => {
                     </div>
 
                     <div className="flex-1">
-                        <label className="block font-medium mb-1">Konsept Türü</label>
+                        <label className="block font-medium mb-1">Konsept Türleri</label>
+                        <MultiSelect
+                            options={conceptTypes}
+                            value={selectedConceptTypes}
+                            onChange={(e) => setSelectedConceptTypes(e.value)}
+                            placeholder="Seçiniz"
+                            maxSelectedLabels={3}
+                            className="w-full"
+                        />
+                    </div>
+
+                    <div className="flex-1">
+                        <label className="block font-medium mb-1">İptal Politikaları</label>
                         <MultiSelect
                             options={conceptTypes}
                             value={selectedConceptTypes}

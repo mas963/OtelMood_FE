@@ -3,15 +3,29 @@
     width: 300px;
     height: calc(100vh - 9rem);
     z-index: 999;
-    overflow-y: auto;
+    overflow: hidden;
     user-select: none;
     top: 7rem;
     left: 2rem;
     transition: transform $transitionDuration, left $transitionDuration;
     background-color: var(--surface-overlay);
     border-radius: $borderRadius;
-    padding: 0.5rem 1.5rem;
+    padding: 0.5rem 1rem;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, .02), 0px 0px 2px rgba(0, 0, 0, .05), 0px 1px 4px rgba(0, 0, 0, .08);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Allow the menu to scroll while keeping the bottom info box anchored */
+.layout-sidebar > .layout-menu {
+    flex: 1 1 auto;
+    min-height: 0; /* enables proper flex scrolling in some browsers */
+    overflow-y: auto;
+}
+
+/* Ensure the last child (hotel info box) stays at the bottom and doesn't shrink */
+.layout-sidebar > div:last-child {
+    flex: 0 0 auto;
 }
 
 .layout-menu {

@@ -1,7 +1,6 @@
 'use client';
 
 import {useEffect, useState} from 'react';
-import {Button} from 'primereact/button';
 import Image from "next/image";
 
 const LandscapePrompt = () => {
