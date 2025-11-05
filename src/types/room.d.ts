@@ -15,7 +15,7 @@ export interface RoomRateDetail {
   price: number
 }
 
-export interface RoomType {
+export interface RoomTypeDetail {
   name: string
   shortName: string
   guestSettings: {
@@ -31,11 +31,15 @@ export interface RoomType {
   }
 }
 
+export interface RoomType {
+  name: string
+  shortName: string
+}
+
 export interface Room {
   roomName: string
-  roomType: RoomType
-  groupName: string
-  status: string
+  roomType: string
+  floorPlan: string
   active: boolean
 }
 
@@ -45,4 +49,19 @@ export interface RoomRate {
   cancelPolicy: string
   sources: string[]
   active: boolean
+}
+
+export interface RoomRateSeason {
+  name: string
+  from: string
+  to: string
+  roomRate: string
+}
+
+export interface HousekeepingList {
+  roomName: string
+  roomType: string
+  floorPlan: string
+  status: string
+  serviceNote: string
 }

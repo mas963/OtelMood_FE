@@ -7,7 +7,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useEffect, useState } from "react";
 import { RoomService } from "@/services/RoomService";
-import { Room, RoomType } from "@/types/room";
+import { Room } from "@/types/room";
 import { Tag } from "primereact/tag";
 import { Sidebar } from "primereact/sidebar";
 import { InputText } from "primereact/inputtext";
@@ -20,10 +20,10 @@ const RoomPage = () => {
   const roomActive: string[] = ['Aktif', 'Pasif'];
   const [roomActiveValue, setRoomActiveValue] = useState<string>(roomActive[0]);
 
-  const roomTypes: RoomType[] = [
-    { name: "Standart", shortName: "STD" },
-    { name: "Deluxe", shortName: "DLX" },
-    { name: "Suite", shortName: "SUI" },
+  const roomTypes: string[] = [
+    "Standart",
+    "Deluxe",
+    "Suite",
   ];
 
   const floorPlans: string[] = [
@@ -40,8 +40,8 @@ const RoomPage = () => {
   const headerTemplate = (data: Room) => {
     return (
       <div className="flex items-center gap-2">
-        <i className="pi pi-list"></i>
-        <span className="font-bold">{data.roomType.name} Odaları</span>
+        <i className="pi pi-building"></i>
+        <span className="font-bold">{data.roomType} Odaları</span>
       </div>
     );
   };
@@ -67,13 +67,12 @@ const RoomPage = () => {
       <div className="grid md:grid-cols-[5fr_1fr] grid-cols-1 gap-3">
         <div>
           <Card title="Oda Listesi">
-            <DataTable value={rooms} rowGroupMode="subheader" groupRowsBy="roomType.name" sortMode="single"
-              sortField="roomType.name"
+            <DataTable value={rooms} rowGroupMode="subheader" groupRowsBy="roomType" sortMode="single"
+              sortField="roomType"
               sortOrder={1} scrollable scrollHeight="650px" rowGroupHeaderTemplate={headerTemplate}
               rowGroupFooterTemplate={footerTemplate}>
               <Column field="roomName" header="Oda" bodyStyle={{ fontWeight: 'bold' }}></Column>
-              <Column field="groupName" header="Grup"></Column>
-              <Column field="status" header="Durum"></Column>
+              <Column field="floorPlan" header="Grup"></Column>
               <Column field="active" header="Aktif" body={activeBodyTemplate}></Column>
             </DataTable>
           </Card>

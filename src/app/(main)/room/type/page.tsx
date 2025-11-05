@@ -9,7 +9,7 @@ import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import { useEffect, useRef, useState } from "react";
 import { ConfirmDialog } from 'primereact/confirmdialog';
-import { RoomType } from "@/types/room";
+import { RoomType, RoomTypeDetail } from "@/types/room";
 import { Sidebar } from "primereact/sidebar";
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
@@ -20,7 +20,7 @@ const RoomTypePage = () => {
   const [roomTypes, setRoomTypes] = useState<RoomType[]>([]);
   const [roomType, setRoomType] = useState<RoomType | undefined>();
   const [deleteRoomTypeDialog, setDeleteRoomTypeDialog] = useState<boolean>(false);
-  const [newRoomType, setNewRoomType] = useState<RoomType>({
+  const [newRoomType, setNewRoomType] = useState<RoomTypeDetail>({
     name: '',
     shortName: '',
     guestSettings: {
@@ -103,7 +103,7 @@ const RoomTypePage = () => {
     const min = newRoomType.guestSettings.guestCount.minAdults || 1;
     const max = newRoomType.guestSettings.guestCount.maxAdults || 1;
     const existingMultipliers = newRoomType.guestSettings.adultGuestMultiplier;
-    const newMultipliers: RoomType['guestSettings']['adultGuestMultiplier'] = [];
+    const newMultipliers: RoomTypeDetail['guestSettings']['adultGuestMultiplier'] = [];
 
     for (let i = min; i <= max; i++) {
       const existing = existingMultipliers.find(m => m.count === i);
@@ -126,7 +126,7 @@ const RoomTypePage = () => {
   useEffect(() => {
     const max = newRoomType.guestSettings.guestCount.maxChildren || 0;
     const existingMultipliers = newRoomType.guestSettings.childGuestMultiplier;
-    const newMultipliers: RoomType['guestSettings']['childGuestMultiplier'] = [];
+    const newMultipliers: RoomTypeDetail['guestSettings']['childGuestMultiplier'] = [];
 
     for (let i = 1; i <= max; i++) {
       const existing = existingMultipliers.find(m => m.count === i);

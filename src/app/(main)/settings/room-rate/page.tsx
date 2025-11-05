@@ -3,6 +3,7 @@
 import { Card } from "primereact/card";
 import { TabPanel, TabView } from "primereact/tabview";
 import RoomRatesTab from "@/components/settings/tabs/room-rates";
+import RoomRatesSeasonTab from "@/components/settings/tabs/room-rates-season";
 
 const RoomRatePage = () => {
     return (
@@ -13,12 +14,7 @@ const RoomRatePage = () => {
                         <RoomRatesTab />
                     </TabPanel>
                     <TabPanel header="Sezonluk Fiyatlar">
-                        <p className="m-0">
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-                            eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
-                            enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui
-                            ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
-                        </p>
+                        <RoomRatesSeasonTab />
                     </TabPanel>
                     <TabPanel header="İptal Politikaları">
                         <p className="m-0">
