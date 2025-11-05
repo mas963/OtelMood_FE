@@ -1,4 +1,4 @@
-import { Room, RoomRate, RoomType, RoomRateDetail } from "@/types/room";
+import { Room, RoomRate, RoomType, RoomRateDetail, HousekeepingList, RoomRateSeason, RoomTypeDetail } from "@/types/room";
 
 export const RoomService = {
   getRoomTypes(): RoomType[] {
@@ -98,14 +98,14 @@ export const RoomService = {
 
   getRooms(): Room[] {
     return [
-      { roomName: '101', roomType: { name: 'Standart', shortName: 'STD' }, groupName: 'Kat 1', status: "Temiz", active: true },
-      { roomName: '102', roomType: { name: 'Standart', shortName: 'STD' }, groupName: 'Kat 1', status: "Temiz", active: false },
-      { roomName: '103', roomType: { name: 'Standart', shortName: 'STD' }, groupName: 'Kat 1', status: "Kirli", active: true },
-      { roomName: '201', roomType: { name: 'Deluxe', shortName: 'Deluxe' }, groupName: 'Kat 2', status: "Temiz", active: false },
-      { roomName: '202', roomType: { name: 'Deluxe', shortName: 'Deluxe' }, groupName: 'Kat 2', status: "Temiz", active: true },
-      { roomName: '203', roomType: { name: 'Deluxe', shortName: 'Deluxe' }, groupName: 'Kat 2', status: "Kirli", active: true },
-      { roomName: '301', roomType: { name: 'Suite', shortName: 'Suite' }, groupName: 'Kat 3', status: "Temiz", active: true },
-      { roomName: '302', roomType: { name: 'Suite', shortName: 'Suite' }, groupName: 'Kat 3', status: "Temiz", active: true },
+      { roomName: '101', roomType: 'Standart', floorPlan: 'Kat 1', active: true },
+      { roomName: '102', roomType: 'Standart', floorPlan: 'Kat 1', active: false },
+      { roomName: '103', roomType: 'Standart', floorPlan: 'Kat 1', active: true },
+      { roomName: '201', roomType: 'Deluxe', floorPlan: 'Kat 2', active: false },
+      { roomName: '202', roomType: 'Deluxe', floorPlan: 'Kat 2', active: true },
+      { roomName: '203', roomType: 'Deluxe', floorPlan: 'Kat 2', active: true },
+      { roomName: '301', roomType: 'Suite', floorPlan: 'Kat 3', active: true },
+      { roomName: '302', roomType: 'Suite', floorPlan: 'Kat 3', active: true },
     ];
   },
 
@@ -118,6 +118,33 @@ export const RoomService = {
         sources: ['OtelMood', 'Channel Manager'],
         active: true
       },
+    ];
+  },
+
+  getRoomRatesSeason(): RoomRateSeason[] {
+    return [
+      {
+        name: 'Yılbaşı Sezonu',
+        from: '25-12-2025',
+        to: '02-01-2026',
+        roomRate: 'Fiyatlandırma 1',
+      },
+    ];
+  },
+
+  getHousekeepingList(): HousekeepingList[] {
+    return [
+      { roomName: '101', roomType: 'Standart', floorPlan: 'Kat 1', status: 'Temiz', serviceNote: '' },
+      { roomName: '102', roomType: 'Standart', floorPlan: 'Kat 1', status: 'Kirli', serviceNote: '' },
+      { roomName: '103', roomType: 'Standart', floorPlan: 'Kat 1', status: 'Servis Dışı', serviceNote: 'Servis Notu' },
+    ];
+  },
+
+  getFloorPlans(): string[] {
+    return [
+      "Kat 1",
+      "Kat 2",
+      "Kat 3",
     ];
   },
 }

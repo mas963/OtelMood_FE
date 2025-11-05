@@ -1,21 +1,16 @@
-import {AppMenuItem} from "../types";
+import { AppMenuItem } from "../types";
 import AppMenuitem from "./AppMenuitem";
-import {MenuProvider} from "./context/menucontext";
+import { MenuProvider } from "./context/menucontext";
 
 const AppMenu = () => {
   const model: AppMenuItem[] = [
     {
-      label: 'Dashboard',
+      label: 'Ön Büro',
       items: [
         {
           label: 'Genel Durum',
           icon: 'pi pi-fw pi-home', to: '/'
-        }
-      ]
-    },
-    {
-      label: 'Ön Büro',
-      items: [
+        },
         {
           label: 'Rezervasyon Listesi',
           icon: 'pi pi-fw pi-list',
@@ -31,15 +26,15 @@ const AppMenu = () => {
           icon: 'pi pi-fw pi-th-large',
           to: '/roomrack'
         },
-      ]
-    },
-    {
-      label: 'Misafirler',
-      items: [
+        {
+          label: 'Housekeeping',
+          icon: 'pi pi-fw pi-tag',
+          to: '/housekeeping'
+        },
         {
           label:
             'Misafir Listesi',
-          icon: 'pi pi-fw pi-list',
+          icon: 'pi pi-fw pi-users',
           to: '/guest'
         },
       ]
@@ -132,7 +127,7 @@ const AppMenu = () => {
     <MenuProvider>
       <ul className="layout-menu">
         {model.map((item, i) => {
-          return !item?.seperator ? <AppMenuitem item={item} root={true} index={i} key={item.label}/> :
+          return !item?.seperator ? <AppMenuitem item={item} root={true} index={i} key={item.label} /> :
             <li className="menu-separator"></li>;
         })}
       </ul>

@@ -18,7 +18,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     }));
 
     return (
-        <div className="layout-topbar">
+        <div className="layout-topbar bg-gradient-to-r from-white via-emerald-50 to-emerald-300">
             <Link href="/" className="layout-topbar-logo">
                 <Image src="/img/otelmoodlogo.png" alt="Logo" width={200} height={200} />
             </Link>
